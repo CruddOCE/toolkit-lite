@@ -1,0 +1,46 @@
+/* Page-specific layout only. Every colour, radius and font comes from the kit,
+   per its rule that component CSS holds no raw values. */
+
+.rate-hero {
+  font-family: var(--font-mono);
+  font-size: var(--fs-2xl);
+  color: var(--accent);
+  margin-bottom: var(--s-3);
+  letter-spacing: -0.01em;
+}
+
+.panel--warn {
+  border-color: var(--warn);
+  background: var(--warn-soft);
+}
+
+.best-hash {
+  font-family: var(--font-mono);
+  font-size: var(--fs-2xs);
+  word-break: break-all;
+  margin-top: var(--s-3);
+}
+
+.odds-line {
+  font-size: var(--fs-sm);
+  line-height: 1.55;
+  margin: 0 0 var(--s-3);
+}
+
+.log {
+  font-family: var(--font-mono);
+  font-size: var(--fs-2xs);
+  line-height: 1.6;
+  color: var(--text-muted);
+  max-height: 16rem;
+  overflow-y: auto;
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* The three top panels stack below the width where their readouts start
+   wrapping mid label. */
+@media (max-width: 60rem) {
+  .row-3 { grid-template-columns: 1fr; }
+}

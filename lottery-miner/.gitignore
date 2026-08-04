@@ -1,0 +1,6 @@
+node_modules/
+.env
+*.log
+
+# Snapshot of where work stopped, rewritten every time. Not project history.
+HANDOFF-WIP.md

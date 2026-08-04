@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lottery Miner</title>
+  <link rel="stylesheet" href="/ui-kit/tokens.css" />
+  <link rel="stylesheet" href="/ui-kit/components.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app app--full-topbar">
+
+    <header class="topbar">
+      <div class="cluster">
+        <strong>Lottery Miner</strong>
+        <span class="version-pin">0.1</span>
+      </div>
+      <div class="topbar__spacer"></div>
+      <div class="cluster">
+        <span class="dot" id="pool-dot"></span>
+        <span class="muted" id="pool-status">connecting</span>
+        <span class="topbar__divider"></span>
+        <span class="muted" id="uptime">0m</span>
+      </div>
+    </header>
+
+    <aside class="rail">
+      <div class="rail__brand">MINER</div>
+      <div class="nav-item is-active">
+        <span class="nav-item__icon">#</span>
+        <span class="nav-item__label">Overview</span>
+      </div>
+      <div class="rail__spacer"></div>
+      <div class="stack" style="padding: var(--s-3);">
+        <button class="btn btn--primary btn--block" id="gpu-start">Start GPU</button>
+        <button class="btn btn--ghost btn--block" id="gpu-stop">Stop GPU</button>
+      </div>
+    </aside>
+
+    <main class="app__content">
+      <div class="app__inner">
+
+        <div id="pause-banner" class="panel panel--warn" hidden>
+          <div class="cluster">
+            <span class="dot dot--warn"></span>
+            <strong>Paused</strong>
+            <span class="muted" id="pause-reason"></span>
+          </div>
+        </div>
+
+        <div class="row-3">
+
+          <section class="panel">
+            <div class="panel__title">Hashrate</div>
+            <div class="rate-hero" id="total-rate">0 H/s</div>
+            <div class="readout">
+              <div class="readout__row">
+                <span class="readout__label">CPU</span>
+                <span class="readout__value readout__value--mono" id="cpu-rate">0 H/s</span>
+              </div>
+              <div class="readout__row">
+                <span class="readout__label">GPU</span>
+                <span class="readout__value readout__value--mono" id="gpu-rate">0 H/s</span>
+              </div>
+              <div class="readout__row">
+                <span class="readout__label">Threads</span>
+                <span class="readout__value" id="threads">0</span>
+              </div>
+              <div class="readout__row">
+                <span class="readout__label">Adapter</span>
+                <span class="readout__value" id="adapter">not started</span>
+              </div>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="panel__title">Pool</div>
+            <div class="readout">
+              <div class="readout__row">
+                <span class="readout__label">Host</span>
+                <span class="readout__value" id="pool-host">...</span>
+              </div>
+              <div class="readout__row">
+                <span class="readout__label">Payout</span>
+                <span class="readout__value readout__value--mono" id="address">...</span>
+              </div>
+              <div class="readout__row">
+                <span class="readout__label">Job</span>
+                <span class="readout__value readout__value--mono" id="job-id">none</span>
+              </div>
+              <div class="readout__row">
+                <span class="readout__label">Share difficulty</span>
+                <span class="readout__value" id="share-diff">0</span>
+              </div>
+              <div class="readout__row">
+                <span class="readout__label">Network difficulty</span>
+                <span class="readout__value" id="net-diff">unknown</span>
+              </div>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="panel__title">Results</div>
+            <div class="readout">
+              <div class="readout__row">
+                <span class="readout__label">Accepted</span>
+                <span class="readout__value readout__value--ok" id="accepted">0</span>
+              </div>
+              <div class="readout__row">
+                <span class="readout__label">Rejected</span>
+                <span class="readout__value" id="rejected">0</span>
+              </div>
+              <div class="readout__row">
+                <span class="readout__label">Best share</span>
+                <span class="readout__value readout__value--accent" id="best-share">0</span>
+              </div>
+              <div class="readout__row">
+                <span class="readout__label">Blocks found</span>
+                <span class="readout__value" id="blocks">0</span>
+              </div>
+            </div>
+            <div class="muted best-hash" id="best-hash"></div>
+          </section>
+
+        </div>
+
+        <section class="panel">
+          <div class="panel__title">Odds</div>
+          <p class="muted odds-line">
+            At the current rate, one block every
+            <strong id="expected-time">a very long time</strong>.
+            The number is what it is: this is a lottery ticket, not an income
+            stream. Every hash is an independent roll, so the wait so far has no
+            bearing on the next one.
+          </p>
+          <div class="progress" title="Best share as a fraction of network difficulty">
+            <div class="progress__fill" id="best-progress" style="width: 0%"></div>
+          </div>
+          <div class="muted odds-line" id="progress-caption">
+            Best share is 0% of the way to a block.
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel__title">Log</div>
+          <pre class="log" id="log"></pre>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
