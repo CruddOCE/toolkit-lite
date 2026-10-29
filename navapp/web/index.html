@@ -21,6 +21,23 @@
     <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><circle cx="12" cy="12" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="2.2" fill="currentColor"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
   </button>
 
+  <button id="report-btn" class="round-btn report-btn" aria-label="Report something on the road">!</button>
+
+  <div id="report-sheet" class="report-sheet" hidden>
+    <div class="report-sheet-title">Report something on the road</div>
+    <div id="type-grid" class="type-grid"></div>
+    <button id="report-cancel" class="ghost-btn">Cancel</button>
+  </div>
+
+  <div id="report-card" class="report-card" hidden>
+    <div id="report-card-title" class="report-card-title"></div>
+    <div id="report-card-count" class="muted"></div>
+    <div class="vote-row">
+      <button id="vote-confirm" class="vote-btn">Still there</button>
+      <button id="vote-dismiss" class="vote-btn gone">Gone</button>
+    </div>
+  </div>
+
   <div id="nav-banner" class="nav-banner" hidden>
     <div id="nav-distance" class="nav-distance"></div>
     <div id="nav-street" class="nav-street"></div>
@@ -40,6 +57,7 @@
   <script src="js/nav.js"></script>
   <script src="js/voice.js"></script>
   <script src="js/map-style.js"></script>
+  <script src="js/reports.js"></script>
   <script src="js/map.js"></script>
 </body>
 </html>

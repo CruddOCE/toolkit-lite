@@ -260,3 +260,105 @@ html, body {
   box-shadow: none;
   transform: translate(0, -8px);
 }
+
+/* Crowd reports: the report button, the type picker, map pins and the vote card. */
+.report-btn {
+  right: 12px;
+  bottom: 130px;
+  background: #f07a1d;
+  color: #fff;
+  font-size: 24px;
+  font-weight: 800;
+}
+
+.report-sheet, .report-card {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1001;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 14px 16px calc(16px + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+  background: #fff;
+  border-radius: 20px 20px 0 0;
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, .18);
+}
+
+.native .report-sheet, .native .report-card {
+  bottom: 56px;
+}
+
+.native .report-btn {
+  bottom: 190px;
+}
+
+.report-sheet-title, .report-card-title {
+  font-size: 17px;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+
+.type-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 12px 0;
+}
+
+.type-btn {
+  height: 52px;
+  border: 0;
+  border-radius: 14px;
+  color: #fff;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.ghost-btn {
+  width: 100%;
+  height: 44px;
+  border: 0;
+  border-radius: 12px;
+  background: #eceff3;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.vote-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.vote-btn {
+  flex: 1;
+  height: 44px;
+  border-radius: 12px;
+  border: 2px solid #dfe3e8;
+  background: #fff;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.vote-btn.gone {
+  color: #e04a3f;
+  border-color: #e04a3f;
+}
+
+.report-pin {
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  color: #fff;
+  font: inherit;
+  font-weight: 800;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, .35);
+  cursor: pointer;
+}

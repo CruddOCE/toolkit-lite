@@ -224,7 +224,28 @@ function startNavigation() {
   followNavigation(devicePosition);
 }
 
+// Android Auto: the car screen reads the phone's navigation state through the
+// NavState plugin. In a browser the plugin does not exist and this does nothing.
+function carPlugin() {
+  return window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.NavState;
+}
+
+function sendCarState(state) {
+  const plugin = carPlugin();
+  if (!plugin) return;
+  plugin
+    .update({ active: true, instruction: state.instruction, distanceM: Math.round(state.distanceToNextM) })
+    .catch(() => {});
+}
+
+function clearCarState() {
+  const plugin = carPlugin();
+  if (!plugin) return;
+  plugin.update({ active: false, instruction: '', distanceM: 0 }).catch(() => {});
+}
+
 function stopNavigation() {
+  clearCarState();
   navigating = false;
   navigator_ = null;
   navBanner.hidden = true;
@@ -266,6 +287,7 @@ function followNavigation(pos, heading) {
   const etaMs = Date.now() + pendingRoute.durationS * 1000;
   navEta.textContent = new Date(etaMs).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   voice.onUpdate(state);
+  sendCarState(state);
   // Heading-up: turn the map to the direction of travel when the phone reports one.
   const easeOptions = { center: [pos.lng, pos.lat], duration: 500 };
   if (Number.isFinite(heading)) easeOptions.bearing = heading;
@@ -280,6 +302,62 @@ function followNavigation(pos, heading) {
 
 startBtn.addEventListener('click', startNavigation);
 endBtn.addEventListener('click', stopNavigation);
+
+// Crowd reports. Markers and the live channel are in reports.js.
+const reportSheet = document.getElementById('report-sheet');
+const reportCard = document.getElementById('report-card');
+const reportCardTitle = document.getElementById('report-card-title');
+const reportCardCount = document.getElementById('report-card-count');
+const voteConfirm = document.getElementById('vote-confirm');
+const voteDismiss = document.getElementById('vote-dismiss');
+
+function minutesAgo(ms) {
+  const m = Math.max(0, Math.round((Date.now() - ms) / 60000));
+  return m === 0 ? 'just now' : `${m} min ago`;
+}
+
+function showReportCard(report) {
+  if (!report) {
+    reportCard.hidden = true;
+    return;
+  }
+  reportCard.hidden = false;
+  reportCardTitle.textContent = `${REPORT_TYPES[report.type].label}, ${minutesAgo(report.createdAt)}`;
+  reportCardCount.textContent = `${report.confirms} still there · ${report.dismisses} gone`;
+  voteConfirm.onclick = () => reports.vote(report.id, 'confirm').catch((err) => setStatus(err.message));
+  voteDismiss.onclick = () => reports.vote(report.id, 'dismiss').catch((err) => setStatus(err.message));
+}
+
+const reports = createReports(map, { onSelect: showReportCard });
+
+const typeGrid = document.getElementById('type-grid');
+for (const [type, style] of Object.entries(REPORT_TYPES)) {
+  const btn = document.createElement('button');
+  btn.className = 'type-btn';
+  btn.style.background = style.colour;
+  btn.textContent = style.label;
+  btn.addEventListener('click', () => postReport(type));
+  typeGrid.appendChild(btn);
+}
+
+function postReport(type) {
+  reportSheet.hidden = true;
+  if (!devicePosition) {
+    setStatus('Waiting for your location before reporting.');
+    return;
+  }
+  reports
+    .create(type, devicePosition)
+    .then(() => setStatus('Report posted. Thanks!'))
+    .catch((err) => setStatus(err.message));
+}
+
+document.getElementById('report-btn').addEventListener('click', () => {
+  reportSheet.hidden = false;
+});
+document.getElementById('report-cancel').addEventListener('click', () => {
+  reportSheet.hidden = true;
+});
 
 document.getElementById('recenter').addEventListener('click', () => {
   if (devicePosition) map.easeTo({ center: [devicePosition.lng, devicePosition.lat], duration: 500 });

@@ -34,11 +34,25 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths"></meta-data>
         </provider>
+        <!-- Android Auto entry point. The NAVIGATION category is what lets the app appear on the car. -->
+        <service
+            android:name=".car.NavCarService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="androidx.car.app.CarAppService" />
+                <category android:name="androidx.car.app.category.NAVIGATION" />
+            </intent-filter>
+        </service>
+        <meta-data
+            android:name="androidx.car.app.minCarApiLevel"
+            android:value="1" />
     </application>
 
     <!-- Permissions -->
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Android Auto navigation screen. -->
+    <uses-permission android:name="androidx.car.app.NAVIGATION_TEMPLATES" />
     <!-- Turn-by-turn needs the precise fix; the Geolocation plugin asks at runtime. -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />

@@ -23,7 +23,92 @@ function get(server, path, headers = {}) {
   });
 }
 
+function post(server, path, body) {
+  const { port } = server.address();
+  const data = JSON.stringify(body);
+  return new Promise((resolve, reject) => {
+    const req = http.request(
+      {
+        host: 'localhost',
+        port,
+        path,
+        method: 'POST',
+        agent: false,
+        headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(data) },
+      },
+      (res) => {
+        let text = '';
+        res.on('data', (c) => (text += c));
+        res.on('end', () => resolve({ status: res.statusCode, body: JSON.parse(text) }));
+      }
+    );
+    req.on('error', reject);
+    req.end(data);
+  });
+}
+
 module.exports = [
+  {
+    name: 'reports: post, list in view, confirm, and live notify',
+    fn: async () => {
+      const { createReportStore } = require('../server/src/reports');
+      const store = createReportStore({ path: ':memory:' });
+      const notified = [];
+      const app = createApp({
+        geocoder: { search: async () => ({ nearby: [], further: [] }) },
+        router: { getRoute: async () => ({}) },
+        reports: store,
+        notify: (r) => notified.push(r),
+      });
+      const server = await new Promise((resolve) => {
+        const s = http.createServer(app).listen(0, () => resolve(s));
+      });
+      try {
+        const reporter = 'device-aaaaaaaa';
+        const created = await post(server, '/api/reports', {
+          type: 'crash',
+          lat: -31.95,
+          lng: 115.86,
+          reporterId: reporter,
+        });
+        assert.strictEqual(created.status, 201);
+        const id = created.body.report.id;
+        assert.strictEqual(notified.length, 1);
+
+        const listed = await get(server, '/api/reports?south=-32&west=115&north=-31&east=117');
+        assert.strictEqual(listed.body.reports.length, 1);
+
+        const confirmed = await post(server, `/api/reports/${id}/confirm`, { reporterId: 'device-bbbbbbbb' });
+        assert.strictEqual(confirmed.body.report.confirms, 1);
+        assert.strictEqual(notified.length, 2);
+
+        const again = await post(server, `/api/reports/${id}/confirm`, { reporterId: 'device-bbbbbbbb' });
+        assert.strictEqual(again.status, 400);
+      } finally {
+        server.close();
+      }
+    },
+  },
+  {
+    name: 'reports: an unknown type is refused with 400',
+    fn: async () => {
+      const { createReportStore } = require('../server/src/reports');
+      const app = createApp({
+        geocoder: { search: async () => ({ nearby: [], further: [] }) },
+        router: { getRoute: async () => ({}) },
+        reports: createReportStore({ path: ':memory:' }),
+      });
+      const server = await new Promise((resolve) => {
+        const s = http.createServer(app).listen(0, () => resolve(s));
+      });
+      try {
+        const r = await post(server, '/api/reports', { type: 'ufo', lat: 1, lng: 2, reporterId: 'device-aaaaaaaa' });
+        assert.strictEqual(r.status, 400);
+      } finally {
+        server.close();
+      }
+    },
+  },
   {
     name: 'API allows the Android app origin (http://localhost) and nothing else',
     fn: async () => {
@@ -54,7 +139,7 @@ module.exports = [
           const req = http.request(
             { host: 'localhost', port, path: '/api/route', method: 'OPTIONS', headers: { Origin: 'http://localhost' }, agent: false },
             (res) => {
-              assert.strictEqual(res.headers['access-control-allow-methods'], 'GET');
+              assert.strictEqual(res.headers['access-control-allow-methods'], 'GET, POST');
               res.resume();
               resolve(res.statusCode);
             }
