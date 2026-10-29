@@ -1,6 +1,6 @@
 # navapp test build: plan and status
 
-Date: 2026-10-29. Debug APK for testing on Courtneah's phone over Wi-Fi.
+Date: 2026-10-29. Debug APK for testing on the owner's phone over Wi-Fi.
 Not a release build. The API address is baked in at build time (NAV_API_BASE).
 
 ## Goal

@@ -32,10 +32,10 @@ The phone has no server, so the app calls the PC's server over Wi-Fi. Three thin
 Then build with that address:
 
 ```bash
-NAV_API_BASE=http://192.168.1.221:8090 npm run android:build
+NAV_API_BASE=http://<PC-IP>:8090 npm run android:build
 ```
 
-Replace `192.168.1.221` with your PC's Wi-Fi address. The build writes it into `web/js/config.js`, bundles the APK, then restores the file. The APK lands at `dist/navapp-debug.apk`.
+Replace `<PC-IP>` with your PC's Wi-Fi address. The build writes it into `web/js/config.js`, bundles the APK, then restores the file. The APK lands at `dist/navapp-debug.apk`.
 
 The address is baked into the APK. If the PC's address changes, rebuild.
 

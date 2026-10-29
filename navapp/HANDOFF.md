@@ -7,7 +7,7 @@ Last updated: 2026-10-29. Read this first when resuming.
 - **Built and tested:** project skeleton, geocoding proxy, OSRM routing wrapper, map screen with search and a route, navigator (Phase 2 logic), voice prompts, navigation view, Capacitor Android shell, debug APK.
 - **Tests:** `npm test` passes 22 tests across `geocode`, `routing`, `server`, `nav` (includes a replayed GPS trace) and `voice`.
 - **Checked in a browser preview:** search, route from a real OSRM response, Start, navigation banner with the next instruction and distance, ETA bar, End.
-- **Built:** `dist/navapp-debug.apk`, built with `NAV_API_BASE=http://192.168.1.221:8090`.
+- **Built:** `dist/navapp-debug.apk`, built with `NAV_API_BASE=http://<PC-IP>:8090`.
 - **Not verified on a phone yet.** No phone was connected over adb when last checked. Install has not been run, so nothing about the phone build is proven.
 - **Not committed or pushed.** The `navapp/` folder sits untracked under the `claude` repo.
 
@@ -27,7 +27,7 @@ Last updated: 2026-10-29. Read this first when resuming.
 
 ## In progress at the stop
 
-Nothing is half-edited. The dev server on port 8090 is running and bound to all interfaces. It was reached at `http://192.168.1.221:8090/api/route` from this PC, but the phone path has not been tested.
+Nothing is half-edited. The dev server on port 8090 is running and bound to all interfaces. It was reached at `http://<PC-IP>:8090/api/route` from this PC, but the phone path has not been tested.
 
 ## Next steps (in order)
 
