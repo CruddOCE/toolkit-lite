@@ -1,6 +1,7 @@
 {
   "name": "navapp",
   "private": true,
+  "version": "0.01",
   "description": "Waze-style navigation app (placeholder name). Server routes and reports, web client, Android Auto later.",
   "main": "server/index.js",
   "engines": {
