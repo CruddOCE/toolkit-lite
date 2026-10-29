@@ -11,6 +11,15 @@
         ],
         "createdAt": "2026-10-29T07:44:42.212Z",
         "reason": "Nav arrow is a CSS-border triangle, not a rounded card; border-radius 0 is intentional"
+      },
+      {
+        "rule": "border-accent-on-rounded",
+        "value": "*",
+        "files": [
+          "navapp/web/css/app.css"
+        ],
+        "createdAt": "2026-10-29T07:46:20.916Z",
+        "reason": "Nav arrow is a CSS-border triangle, not a rounded card; border-radius 0 is intentional (user confirmed)"
       }
     ]
   }
