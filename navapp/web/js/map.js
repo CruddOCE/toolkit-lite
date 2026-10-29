@@ -97,20 +97,36 @@ const RESTART_WATCH_MS = 5000;
 // permission and then reports fixes. In a normal browser, use the standard API.
 const nativeGeo = window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.Geolocation;
 
+// The native watch can go quiet after a fix without reporting an error, so a
+// watchdog restarts it when no fix has arrived for STALL_MS.
+const STALL_MS = 20000;
+let lastFixAt = 0;
+let nativeWatchId = null;
+
 function startNativeWatch() {
-  nativeGeo.watchPosition(
-    { enableHighAccuracy: true, maximumAge: 2000, timeout: LOCATION_TIMEOUT_MS },
-    (pos, err) => {
-      if (err || !pos) {
-        setStatus('Finding your location...');
-        setTimeout(startNativeWatch, RESTART_WATCH_MS);
-        return;
+  if (nativeWatchId !== null) nativeGeo.clearWatch({ id: nativeWatchId });
+  lastFixAt = Date.now();
+  nativeWatchId = nativeGeo.watchPosition(
+      { enableHighAccuracy: true, maximumAge: 2000, timeout: LOCATION_TIMEOUT_MS },
+      (pos, err) => {
+        if (err || !pos) {
+          setStatus("Finding your location...");
+          setTimeout(startNativeWatch, RESTART_WATCH_MS);
+          return;
+        }
+        lastFixAt = Date.now();
+        if (statusLine.textContent.startsWith("Finding your location")) setStatus("");
+        onPosition(pos.coords);
       }
-      if (statusLine.textContent.startsWith('Finding your location')) setStatus('');
-      onPosition(pos.coords);
-    }
-  );
+    );
 }
+
+setInterval(() => {
+  if (nativeGeo && Date.now() - lastFixAt > STALL_MS) {
+    setStatus("Finding your location...");
+    startNativeWatch();
+  }
+}, 5000);
 
 async function startLocation() {
   if (nativeGeo) {
