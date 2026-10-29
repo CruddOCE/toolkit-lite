@@ -4,18 +4,20 @@ Last updated: 2026-10-29. Read this first when resuming.
 
 ## Where it stands
 
-- **Built and tested:** project skeleton, geocoding proxy, OSRM routing wrapper, map screen with search and a route, navigator (Phase 2 logic), voice prompts, navigation view, Capacitor Android shell, debug APK.
-- **Tests:** `npm test` passes 22 tests across `geocode`, `routing`, `server`, `nav` (includes a replayed GPS trace) and `voice`.
+- **Built:** project skeleton, geocoding proxy, OSRM routing wrapper, map screen with search and a route, navigator (Phase 2 logic), voice prompts, navigation view, crowd reports (server and client), Capacitor Android shell, Android Auto navigation screen, debug APK (`dist/navapp-debug.apk`, built with `NAV_API_BASE=http://<PC-IP>:8090`).
+- **Tests:** `npm test` passes across `geocode`, `routing`, `server` (including the 40 report tests), `nav` (includes a replayed GPS trace) and `voice`.
 - **Checked in a browser preview:** search, route from a real OSRM response, Start, navigation banner with the next instruction and distance, ETA bar, End.
-- **Built:** `dist/navapp-debug.apk`, built with `NAV_API_BASE=http://<PC-IP>:8090`.
-- **Not verified on a phone yet.** No phone was connected over adb when last checked. Install has not been run, so nothing about the phone build is proven.
-- **Not committed or pushed.** The `navapp/` folder sits untracked under the `claude` repo.
+- **Installed on the phone:** the debug APK is recorded as installed in `BUILD-PLAN.md`. Nothing in the phone checks below is confirmed yet.
+- **Not verified on a phone or the road yet:** place search and route drawing (issues 1a and 1b), the drive (2a to 2d), crowd reports (3b and 3c), phone reaching the server (4b), and the car screen route (4a-1).
+- **Confirmed working:** nothing is recorded as tested and confirmed yet.
+- **Slice status:** every slice has its own file in `navapp/issues/`, with the status and a dated log. Start with `navapp/issues/README.md`.
+- **Committed on `navapp-test-build`, not pushed.** The `navapp/` source is tracked in the `claude` repo. Push needs the owner's approval.
 
 ## Decisions made
 
 - **Placeholder name and package id.** Folder `navapp`, package `com.example.navapp`. No name chosen yet.
 - **Android first.** Capacitor 8.5.3 (released 2026-10-07, at least two weeks old). Newer 8.6.0 is not used yet.
-- **v1 scope:** crowd reports (Phase 3, not built), Android Auto (Phase 4a, not built), anonymous device IDs, no accounts.
+- **v1 scope:** crowd reports (Phase 3, built, awaiting phone checks), Android Auto (Phase 4a, built, route on the car not confirmed), anonymous device IDs, no accounts.
 - **Phone reaches the PC's server over Wi-Fi.** The phone has no server, so the APK calls `http://<PC Wi-Fi IP>:8090`. The address is baked in at build time. The Android manifest allows cleartext HTTP, and Capacitor's `androidScheme` is `http` so the page can make those calls. This is acceptable for home Wi-Fi testing only. The release build needs an HTTPS API.
 - **Navigator depart step.** The depart step is skipped if the first GPS fix is more than 25 m from the start point (the app was opened mid-route).
 - **Off route.** Measured as distance to the nearest route segment, not the nearest vertex. Off route after 3 fixes in a row, more than 40 m away. Reroute at most every 10 seconds.
@@ -31,12 +33,16 @@ Nothing is half-edited. The dev server on port 8090 is running and bound to all 
 
 ## Next steps (in order)
 
-1. **Install on the phone.** Turn on Wireless debugging on the phone, pair and connect it (README "Install over Wi-Fi debugging"), then run `npm run android:install`. Confirm the app launches and shows the map.
-2. **Check that the phone reaches the server.** If the search or route fails on the phone, check the Windows Firewall prompt for port 8090 first.
-3. **Phone test drive.** Search a place, press Start, and check the banner, the spoken prompts and the ETA. Use a passenger to operate the phone (see the road-test rules in the plan).
-4. **Phase 3:** crowd reports (`server/src/reports.js`, `live.js`, report UI).
-5. **Phase 4a:** Android Auto (native Car App Library module). Confirm the Car App Library version with the user before adding it to Gradle. Test on the Desktop Head Unit.
-6. **Road test:** save a real GPS trace as a fixture for `test/nav.test.js`.
+The full list lives in `navapp/issues/`. Work them in this order:
+
+1. **Issue 4b:** confirm the phone reaches the server on the PC. If it fails, check the Windows Firewall prompt for port 8090 first.
+2. **Issue 2a:** confirm location recovers after an indoor stall.
+3. **Issues 1a and 1b:** confirm place search and route drawing on the phone.
+4. **Issues 2b to 2e:** the road test, with a passenger operating the phone. Save the GPS trace as a fixture for `test/nav.test.js` (issue 2e).
+5. **Issue 3a:** fix the report-screen crash listed in the CHANGELOG, before other Phase 3 work.
+6. **Issues 3b and 3c:** confirm reports and votes on two phones.
+7. **Issue 4a-1:** confirm a route shows on the Desktop Head Unit.
+8. **Issues 3d and 4a-2:** need the owner's approval before starting.
 
 ## Open questions and assumptions
 
