@@ -11,8 +11,14 @@ async function getJson(url) {
   return body;
 }
 
-function searchPlaces(query) {
-  return getJson(`/api/geocode?q=${encodeURIComponent(query)}`).then((b) => b.results);
+// near is the device position ({lat, lng}) or null. Resolves to { nearby, further }.
+function searchPlaces(query, near) {
+  const qs = new URLSearchParams({ q: query });
+  if (near) {
+    qs.set('lat', near.lat);
+    qs.set('lng', near.lng);
+  }
+  return getJson(`/api/geocode?${qs}`);
 }
 
 function fetchRoute(from, to) {

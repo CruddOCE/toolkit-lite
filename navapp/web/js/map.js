@@ -88,40 +88,73 @@ if (window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.is
 
 const onLocationError = () => setStatus('Location unavailable. Search still works.');
 
+// A GPS fix can take well over the plugin's default 10 seconds indoors, so the
+// timeout is 30. The plugin also closes the watch after an error, so restart it.
+const LOCATION_TIMEOUT_MS = 30000;
+const RESTART_WATCH_MS = 5000;
+
 // In the Android app, the Capacitor Geolocation plugin asks for the location
 // permission and then reports fixes. In a normal browser, use the standard API.
 const nativeGeo = window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.Geolocation;
 
+function startNativeWatch() {
+  nativeGeo.watchPosition(
+    { enableHighAccuracy: true, maximumAge: 2000, timeout: LOCATION_TIMEOUT_MS },
+    (pos, err) => {
+      if (err || !pos) {
+        setStatus('Finding your location...');
+        setTimeout(startNativeWatch, RESTART_WATCH_MS);
+        return;
+      }
+      if (statusLine.textContent.startsWith('Finding your location')) setStatus('');
+      onPosition(pos.coords);
+    }
+  );
+}
+
 async function startLocation() {
   if (nativeGeo) {
     await nativeGeo.requestPermissions();
-    nativeGeo.watchPosition({ enableHighAccuracy: true, maximumAge: 2000 }, (pos, err) => {
-      if (err || !pos) return onLocationError();
-      onPosition(pos.coords);
-    });
+    startNativeWatch();
     return;
   }
   if ('geolocation' in navigator) {
     navigator.geolocation.watchPosition(
       (p) => onPosition(p.coords),
       onLocationError,
-      { enableHighAccuracy: true, maximumAge: 2000 }
+      { enableHighAccuracy: true, maximumAge: 2000, timeout: LOCATION_TIMEOUT_MS }
     );
   }
 }
 
 startLocation();
 
-function renderResults(places) {
+// Nearby places first, then a "Further away" heading and the rest of the world.
+function renderResults({ nearby, further }) {
   resultsList.replaceChildren();
-  for (const place of places) {
+  const addHeading = (text) => {
+    const li = document.createElement('li');
+    li.className = 'group-heading';
+    li.textContent = text;
+    resultsList.appendChild(li);
+  };
+  const addPlace = (place) => {
     const li = document.createElement('li');
     li.textContent = place.name;
     li.addEventListener('click', () => chooseDestination(place));
     resultsList.appendChild(li);
+  };
+  if (nearby.length) {
+    addHeading('Nearby');
+    nearby.forEach(addPlace);
   }
-  resultsList.hidden = places.length === 0;
-  if (places.length === 0) setStatus('No places found.');
+  if (further.length) {
+    addHeading('Further away');
+    further.forEach(addPlace);
+  }
+  const total = nearby.length + further.length;
+  resultsList.hidden = total === 0;
+  if (total === 0) setStatus('No places found.');
 }
 
 async function runSearch(query) {
@@ -132,7 +165,7 @@ async function runSearch(query) {
   }
   setStatus('Searching...');
   try {
-    renderResults(await searchPlaces(query));
+    renderResults(await searchPlaces(query, devicePosition));
     if (resultsList.hidden === false) setStatus('');
   } catch (err) {
     resultsList.hidden = true;
@@ -247,6 +280,10 @@ function followNavigation(pos, heading) {
 
 startBtn.addEventListener('click', startNavigation);
 endBtn.addEventListener('click', stopNavigation);
+
+document.getElementById('recenter').addEventListener('click', () => {
+  if (devicePosition) map.easeTo({ center: [devicePosition.lng, devicePosition.lat], duration: 500 });
+});
 
 let searchTimer = null;
 searchInput.addEventListener('input', () => {

@@ -63,7 +63,7 @@ npm run android:install
 | `NOMINATIM_URL` | `https://nominatim.openstreetmap.org` | Place search. Public service, for development only |
 | `OSRM_URL` | `https://router.project-osrm.org` | Routing. Public demo server, for development only |
 | `USER_AGENT` | `navapp/dev (placeholder contact)` | Sent to Nominatim, which requires an identifying User-Agent |
-| `NAV_VIEWBOX` | Perth WA box | Search bias as `left,top,right,bottom` (lng,lat). Set to empty to remove the bias |
+Place search needs no setting. It returns places within 100 km of the device as "Nearby", and everything else as "Further away", using the device position the app sends.
 
 Build-side: `NAV_API_BASE` (see above).
 

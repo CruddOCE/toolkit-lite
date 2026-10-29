@@ -18,13 +18,30 @@ html, body {
   inset: 0;
 }
 
+/* Search sits in a white bottom sheet with a grab handle, as in Waze. */
 .search-panel {
   position: fixed;
-  top: calc(12px + env(safe-area-inset-top));
-  left: 12px;
-  right: 12px;
+  left: 0;
+  right: 0;
+  bottom: 0;
   z-index: 1000;
   max-width: 480px;
+  margin: 0 auto;
+  padding: 10px 14px calc(14px + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+  background: #fff;
+  border-radius: 20px 20px 0 0;
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, .18);
+}
+
+.search-panel::before {
+  content: "";
+  display: block;
+  width: 40px;
+  height: 4px;
+  margin: 0 auto 12px;
+  border-radius: 4px;
+  background: #c5ccd3;
 }
 
 #search {
@@ -34,8 +51,7 @@ html, body {
   padding: 0 16px;
   border: 0;
   border-radius: 999px;
-  background: #fff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, .2);
+  background: #f1f3f6;
   font: inherit;
 }
 
@@ -43,10 +59,34 @@ html, body {
   margin: 8px 0 0;
   padding: 0;
   list-style: none;
+  max-height: 45vh;
+  overflow-y: auto;
   background: #fff;
+  border: 1px solid #eef1f4;
   border-radius: 14px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, .2);
-  overflow: hidden;
+}
+
+/* Round white map controls, as in Waze. */
+.round-btn {
+  position: fixed;
+  z-index: 1000;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: #fff;
+  color: #1d2733;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .22);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.recenter {
+  left: 12px;
+  bottom: 130px;
 }
 
 .results li {
@@ -57,6 +97,21 @@ html, body {
 
 .results li:first-child {
   border-top: 0;
+}
+
+.results li.group-heading {
+  padding: 8px 14px 4px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #5f6b78;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  background: #f6f7f5;
+  cursor: default;
+}
+
+.results li.group-heading:hover {
+  background: #f6f7f5;
 }
 
 .results li:hover {
@@ -84,19 +139,24 @@ html, body {
   box-sizing: border-box;
 }
 
-/* The Android app draws under the status bar, so content needs a fixed offset there.
-   map.js adds the "native" class only when running inside Capacitor. */
-.native .search-panel,
+/* The Android app is drawn edge to edge, so it runs under the status bar and the
+   system navigation bar. map.js adds the "native" class only inside Capacitor.
+   The offsets keep controls clear of both bars. */
 .native .nav-banner {
   top: 40px;
 }
 
-@media (max-width: 600px) {
-  .search-panel {
-    left: 10px;
-    right: 10px;
-    top: 10px;
-  }
+.native .search-panel,
+.native .nav-bottom {
+  bottom: 56px;
+}
+
+.native .recenter {
+  bottom: 190px;
+}
+
+.native .maplibregl-ctrl-bottom-right {
+  bottom: 56px;
 }
 
 /* Navigation view (Phase 2). Mirrors the approved Waze-style mockup. */

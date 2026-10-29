@@ -22,7 +22,7 @@ Last updated: 2026-10-29. Read this first when resuming.
 - **Voice.** Each manoeuvre is announced once at 400 m, 100 m and 20 m. A jump past several thresholds speaks only the closest one.
 - **ETA.** Calculated from the route's total duration at the start, not re-estimated as you drive. It drifts on long routes. Acceptable for now.
 - **Test port.** Server tests use an OS-picked port, not 8092, because a fixed port collided between tests.
-- **Search bias.** Nominatim prefers Perth WA by default (`NAV_VIEWBOX`). It is a preference, not a bound.
+- **Search results.** Each search returns "nearby" (inside 100 km of the device, bounded search) and "further" (everything else, shown under a "Further away" heading). Without a device position, everything is "further". The old Perth-only viewbox (`NAV_VIEWBOX`) is gone.
 - **Location on Android.** Uses the Capacitor Geolocation plugin when running in the app, and the browser API otherwise.
 
 ## In progress at the stop
