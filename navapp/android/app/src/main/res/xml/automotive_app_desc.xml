@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Declares to Android Auto that this app provides car templates. Google's Car App
+  Library sample (android/car-samples, car_app_library/navigation) uses the same file.
+-->
+<automotiveApp>
+  <uses name="template" />
+</automotiveApp>

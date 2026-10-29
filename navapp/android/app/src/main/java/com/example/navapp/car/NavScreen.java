@@ -8,10 +8,12 @@ import androidx.car.app.model.Distance;
 import androidx.car.app.model.MessageTemplate;
 import androidx.car.app.model.Template;
 import androidx.car.app.navigation.NavigationManager;
+import androidx.car.app.navigation.NavigationManagerCallback;
 import androidx.car.app.navigation.model.Maneuver;
 import androidx.car.app.navigation.model.NavigationTemplate;
 import androidx.car.app.navigation.model.RoutingInfo;
 import androidx.car.app.navigation.model.Step;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 
@@ -23,6 +25,16 @@ public class NavScreen extends Screen implements NavState.Listener {
     public NavScreen(@NonNull CarContext carContext) {
         super(carContext);
         NavState.addListener(this);
+        // Navigation must have a callback before navigationStarted() can be called,
+        // or Android throws "No callback has been set" and the app crashes.
+        carContext.getCarService(NavigationManager.class).setNavigationManagerCallback(
+                ContextCompat.getMainExecutor(carContext),
+                new NavigationManagerCallback() {
+                    @Override
+                    public void onStopNavigation() {
+                        NavState.update(false, "", 0);
+                    }
+                });
         getLifecycle().addObserver(new DefaultLifecycleObserver() {
             @Override
             public void onDestroy(@NonNull LifecycleOwner owner) {
