@@ -1,0 +1,45 @@
+{
+  "code": "Ok",
+  "routes": [
+    {
+      "distance": 1240.5,
+      "duration": 210.3,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [115.8575, -31.9505],
+          [115.8580, -31.9510],
+          [115.8601, -31.9510],
+          [115.8602, -31.9535]
+        ]
+      },
+      "legs": [
+        {
+          "distance": 1240.5,
+          "duration": 210.3,
+          "steps": [
+            {
+              "name": "Mounts Bay Rd",
+              "distance": 460.0,
+              "duration": 80.1,
+              "maneuver": { "type": "depart", "modifier": "left", "location": [115.8575, -31.9505] }
+            },
+            {
+              "name": "Harbour St",
+              "distance": 780.5,
+              "duration": 130.2,
+              "maneuver": { "type": "turn", "modifier": "right", "location": [115.8601, -31.9510] }
+            },
+            {
+              "name": "",
+              "distance": 0,
+              "duration": 0,
+              "maneuver": { "type": "arrive", "location": [115.8602, -31.9535] }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "waypoints": []
+}

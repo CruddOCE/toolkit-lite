@@ -1,0 +1,11 @@
+{
+  "appId": "com.example.navapp",
+  "appName": "navapp",
+  "webDir": "web",
+  "server": {
+    "androidScheme": "http"
+  },
+  "plugins": {
+    "Geolocation": {}
+  }
+}

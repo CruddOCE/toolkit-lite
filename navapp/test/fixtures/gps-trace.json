@@ -1,0 +1,27 @@
+{
+  "description": "Hand-built trace on a straight north-south route at lng 115.86. 0.0001 deg lat is about 11 m. Steps: depart at -31.950, right turn at -31.955, arrive at -31.960. Fixes 5 to 7 are about 140 m east of the route (off route). Fix 8 is back on the route at the destination.",
+  "route": {
+    "distanceM": 1112,
+    "durationS": 180,
+    "geometry": [
+      [-31.950, 115.86], [-31.951, 115.86], [-31.952, 115.86], [-31.953, 115.86],
+      [-31.954, 115.86], [-31.955, 115.86], [-31.956, 115.86], [-31.957, 115.86],
+      [-31.958, 115.86], [-31.959, 115.86], [-31.960, 115.86]
+    ],
+    "steps": [
+      { "instruction": "Head south on Harbour St", "distanceM": 556, "maneuver": "depart", "location": { "lat": -31.950, "lng": 115.86 } },
+      { "instruction": "Turn right onto Mill St", "distanceM": 556, "maneuver": "turn", "location": { "lat": -31.955, "lng": 115.86 } },
+      { "instruction": "You have arrived", "distanceM": 0, "maneuver": "arrive", "location": { "lat": -31.960, "lng": 115.86 } }
+    ]
+  },
+  "fixes": [
+    { "lat": -31.9505, "lng": 115.86 },
+    { "lat": -31.9540, "lng": 115.86 },
+    { "lat": -31.9551, "lng": 115.86 },
+    { "lat": -31.9554, "lng": 115.86 },
+    { "lat": -31.9540, "lng": 115.8615 },
+    { "lat": -31.9540, "lng": 115.8615 },
+    { "lat": -31.9540, "lng": 115.8615 },
+    { "lat": -31.9600, "lng": 115.86 }
+  ]
+}

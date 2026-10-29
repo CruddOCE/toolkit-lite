@@ -1,0 +1,24 @@
+{
+  "name": "navapp",
+  "private": true,
+  "description": "Waze-style navigation app (placeholder name). Server routes and reports, web client, Android Auto later.",
+  "main": "server/index.js",
+  "engines": {
+    "node": ">=22.5"
+  },
+  "scripts": {
+    "start": "node server/index.js",
+    "test": "node test/run.js",
+    "android:build": "node scripts/build-android.js",
+    "android:install": "node scripts/build-android.js --install"
+  },
+  "dependencies": {
+    "@capacitor/android": "8.5.3",
+    "@capacitor/core": "8.5.3",
+    "@capacitor/geolocation": "8.2.4",
+    "express": "^4.22.3"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "8.5.3"
+  }
+}

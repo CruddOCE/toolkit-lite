@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">navapp</string>
+    <string name="title_activity_main">navapp</string>
+    <string name="package_name">com.example.navapp</string>
+    <string name="custom_url_scheme">com.example.navapp</string>
+</resources>

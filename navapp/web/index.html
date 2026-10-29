@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>navapp</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maplibre-gl@5.24.0/dist/maplibre-gl.css" integrity="sha256-qx5w1Z7EBGW65+cDDaLzzPKBM/1QLmK9WY7vut/XpzI=" crossorigin="anonymous">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+  <div id="map"></div>
+
+  <div class="search-panel">
+    <input id="search" type="search" placeholder="Where to?" autocomplete="off" aria-label="Search for a place">
+    <ul id="results" class="results" hidden></ul>
+    <button id="start" class="start-btn" hidden>Start</button>
+    <p id="status" class="status" role="status"></p>
+  </div>
+
+  <div id="nav-banner" class="nav-banner" hidden>
+    <div id="nav-distance" class="nav-distance"></div>
+    <div id="nav-street" class="nav-street"></div>
+  </div>
+
+  <div id="nav-bottom" class="nav-bottom" hidden>
+    <div>
+      <div id="nav-eta" class="nav-eta"></div>
+      <div id="nav-remaining" class="muted"></div>
+    </div>
+    <button id="end" class="end-btn">End</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/maplibre-gl@5.24.0/dist/maplibre-gl.js" integrity="sha256-RamwepGJzlYFTGIKlHzPQeKR5YyV6bYVM7dAqqZe5cs=" crossorigin="anonymous"></script>
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/nav.js"></script>
+  <script src="js/voice.js"></script>
+  <script src="js/map-style.js"></script>
+  <script src="js/map.js"></script>
+</body>
+</html>
